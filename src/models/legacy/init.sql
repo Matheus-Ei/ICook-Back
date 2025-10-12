@@ -1,176 +1,77 @@
--- Enums
-CREATE TYPE subscription_status AS ENUM ('Active', 'Inactive', 'Suspended', 'Canceled');
-CREATE TYPE visibility_type AS ENUM ('Public', 'Private');
-
--- Tables
-CREATE TABLE account (
+CREATE TABLE users (
   id SERIAL PRIMARY KEY,
 
-  full_name VARCHAR(100) NOT NULL,
-  nickname VARCHAR(50) NOT NULL UNIQUE,
+  name VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
 
-  is_verified BOOLEAN DEFAULT FALSE,
-  picture VARCHAR(400),
-  bio TEXT,
+  picture_base64 TEXT,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE account_settings (
-  id SERIAL PRIMARY KEY,
-
-  language VARCHAR(50) DEFAULT 'EN',
-  country VARCHAR(50) DEFAULT 'US',
-  theme VARCHAR(100) DEFAULT 'Default',
-
-  account_id INT REFERENCES account (id) ON DELETE CASCADE
-);
-
-CREATE TABLE subscription_plan (
-  id SERIAL PRIMARY KEY,
-
-  title VARCHAR(100) NOT NULL UNIQUE,
-  price NUMERIC(10, 2) NOT NULL CHECK (price >= 0)
-);
-
-CREATE TABLE subscription (
-  id SERIAL PRIMARY KEY,
-
-  last_paid DATE DEFAULT CURRENT_DATE,
-  status subscription_status DEFAULT 'Active',
-
-  subscription_plan_id INT REFERENCES subscription_plan (id) ON DELETE CASCADE,
-  account_id INT REFERENCES account (id) ON DELETE CASCADE
-);
-
-CREATE TABLE role (
-  id SERIAL PRIMARY KEY,
-
-  name VARCHAR(50) NOT NULL,
-  description TEXT
-);
-
-CREATE TABLE project (
-  id SERIAL PRIMARY KEY,
-
-  title VARCHAR(255) NOT NULL,
-  description TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-  owner_account_id INT REFERENCES account (id) ON DELETE CASCADE
-);
-
-CREATE TABLE project_settings (
-  id SERIAL PRIMARY KEY,
-
-  visibility visibility_type DEFAULT 'Private',
-
-  project_id INT UNIQUE REFERENCES project (id) ON DELETE CASCADE
-);
-
-CREATE TABLE shared_project (
-  id SERIAL PRIMARY KEY,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-  role_id INT REFERENCES role (id),
-  account_id INT REFERENCES account (id) ON DELETE CASCADE,
-  project_id INT REFERENCES project (id) ON DELETE CASCADE,
-
-  UNIQUE (account_id, project_id)
-);
-
-CREATE TABLE module (
-  id SERIAL PRIMARY KEY,
-
-  title VARCHAR(100) UNIQUE NOT NULL,
-  description TEXT
-);
-
-CREATE TABLE page (
+CREATE TABLE recipes (
   id SERIAL PRIMARY KEY,
 
   title VARCHAR(100) NOT NULL,
   description TEXT,
-  emoji VARCHAR(10),
-  position FLOAT DEFAULT 0,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  ingredients TEXT NOT NULL,
+  instructions TEXT NOT NULL,
 
-  parent_page_id INT REFERENCES page (id) ON DELETE CASCADE,
-  project_id INT REFERENCES project (id) ON DELETE CASCADE,
-  module_id INT REFERENCES module (id),
+  owner_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
 
-  UNIQUE(project_id, parent_page_id, position)
-);
-
--- Note page type
-CREATE TABLE note_page_data (
-  page_id INT PRIMARY KEY REFERENCES page (id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE note_node (
+CREATE TABLE recipe_images (
   id SERIAL PRIMARY KEY,
 
-  content TEXT,
-  metadata TEXT,
-  type VARCHAR(100) NOT NULL,
+  recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE,
+  image_base64 TEXT NOT NULL,
 
-  next_id INT REFERENCES note_node (id) ON DELETE SET NULL,
-  page_id INT REFERENCES note_page_data (page_id) ON DELETE CASCADE
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE feedback (
+CREATE TABLE recipe_comments (
   id SERIAL PRIMARY KEY,
 
-  email VARCHAR(200) NOT NULL,
-  commentary TEXT,
+  recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  comment TEXT NOT NULL,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE recipe_rates (
+  id SERIAL PRIMARY KEY,
+
+  recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  rate INTEGER CHECK (rate >= 1 AND rate <= 5) NOT NULL,
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  rating INT CHECK (rating BETWEEN 1 AND 5)
+
+  UNIQUE(recipe_id, user_id)
 );
 
-CREATE TABLE tool (
+CREATE TABLE user_saved_recipes (
   id SERIAL PRIMARY KEY,
 
-  title VARCHAR(50) UNIQUE,
-  description VARCHAR(500),
-  endpoint VARCHAR(200) NOT NULL
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  UNIQUE(user_id, recipe_id)
 );
 
--- Functions
-CREATE OR REPLACE FUNCTION get_child(parent_id INT)
-RETURNS JSONB
-LANGUAGE SQL 
-AS $$
-  SELECT COALESCE(
-    JSONB_AGG(
-      JSONB_BUILD_OBJECT(
-        'id', child_page.id,
-        'emoji', child_page.emoji,
-        'title', child_page.title,
-        'description', child_page.description,
-        'position', child_page.position,
-        'child_pages', get_child(child_page.id)
-      )
-      ORDER BY child_page.position, child_page.id
-    ), '[]'::JSONB
-  )
-  FROM page AS child_page
-  WHERE child_page.parent_page_id = parent_id;
-$$;
+CREATE TABLE user_follows (
+  id SERIAL PRIMARY KEY,
 
-CREATE OR REPLACE FUNCTION insert_node()
-RETURNS TRIGGER AS $$
-BEGIN
-  INSERT INTO note_node (content, next_id, type, page_id) 
-  VALUES (' ', NULL, 'paragraph', NEW.page_id);
+  follower_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  followed_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
 
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-CREATE TRIGGER trigger_insert_node
-AFTER INSERT ON note_page_data
-FOR EACH ROW
-EXECUTE FUNCTION insert_node();
+  UNIQUE(follower_user_id, followed_user_id)
+);
