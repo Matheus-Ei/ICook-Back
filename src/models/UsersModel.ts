@@ -4,7 +4,6 @@ import { AbstractModel } from './AbstractModel';
 export class UsersModel extends AbstractModel<UsersModel> {
   declare id: CreationOptional<number>;
   declare name: string;
-  declare about: string;
   declare email: string;
   declare password: string;
   declare createdAt?: Date;
@@ -20,12 +19,6 @@ export class UsersModel extends AbstractModel<UsersModel> {
         },
 
         name: { type: DataTypes.STRING, allowNull: false },
-
-        about: {
-          type: DataTypes.TEXT,
-          allowNull: false,
-          defaultValue: 'About you description...',
-        },
 
         email: {
           type: DataTypes.STRING,

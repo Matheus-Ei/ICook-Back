@@ -6,4 +6,3 @@ import './binds/ServiceProvider';
 import './binds/ControllerProvider';
 import './binds/RouteProvider';
 import './binds/MiddlewareProvider';
-import './binds/JobProvider';

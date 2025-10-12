@@ -7,7 +7,6 @@ import { Cookie } from '../utils/cookie';
 import { User } from '../entities/User';
 import { Hash } from '../utils/hash';
 import { Response } from 'express';
-import { UserSubscriptionService } from './UserSubscriptionService';
 import { Database } from '../database';
 import { TreatError } from '../utils/error';
 
@@ -17,8 +16,6 @@ export class UserService {
     @inject(TYPES.UserRepository) private userRepository: UserRepository,
     @inject(TYPES.TokenService) private tokenService: TokenService,
     @inject(TYPES.Database) private database: Database,
-    @inject(TYPES.UserSubscriptionService)
-    private userSubscriptionService: UserSubscriptionService
   ) {}
 
   login = async (
@@ -62,17 +59,6 @@ export class UserService {
       if (!user) {
         await transaction.rollback();
         throw new Error('The user was not created');
-      }
-
-      const userSubscription =
-        await this.userSubscriptionService.persistFreePlan(
-          user.id,
-          transaction
-        );
-
-      if (!userSubscription) {
-        await transaction.rollback();
-        throw new Error('The user subscription was not created');
       }
 
       await transaction.commit();

@@ -17,8 +17,6 @@ import { logger } from './utils/logger';
 import { ENV } from './constants/enviroment';
 import { ROUTES } from './constants/routes';
 import { Database } from './database';
-import { Scheduler } from './utils/scheduler';
-import { schedules } from './constants/schedules';
 
 export class App {
   public server: Express;
@@ -37,16 +35,11 @@ export class App {
 
     this.middlewares();
     this.routes();
-    if (ENV.NODE_ENV !== 'test') this.scheduleJobs();
   }
 
   private bootstrap = async (): Promise<void> => {
     const database = container.get<Database>(TYPES.Database);
     await database.authenticate();
-  };
-
-  private scheduleJobs = (): void => {
-    Scheduler.make(schedules);
   };
 
   private routes = (): void => {

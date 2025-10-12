@@ -10,12 +10,6 @@ export class UserSchema {
       email: z
         .string({ message: 'Email must be a string' })
         .email({ message: 'Invalid email format' }),
-      about: z
-        .string({ message: 'About description must be a string' })
-        .min(8, {
-          message: 'About description must be at leas 8 characters long',
-        })
-        .optional(),
       password: z
         .string({ message: 'Password must be a string' })
         .min(8, { message: 'Password must be at least 8 characters long' })
@@ -55,12 +49,6 @@ export class UserSchema {
         email: z
           .string({ message: 'Email must be a string' })
           .email({ message: 'Invalid email format' })
-          .optional(),
-        about: z
-          .string({ message: 'About description must be a string' })
-          .min(8, {
-            message: 'About description must be at leas 8 characters long',
-          })
           .optional(),
         password: z
           .string({ message: 'Password must be a string' })

@@ -8,7 +8,7 @@ import { Transaction } from 'sequelize';
 export class UserRepository {
   private createObject = (user: UsersModel | null): User | null => {
     return user
-      ? new User(user.id, user.name, user.email, user.password, user.about)
+      ? new User(user.id, user.name, user.email, user.password)
       : null;
   };
 
