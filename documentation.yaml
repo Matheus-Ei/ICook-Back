@@ -1,0 +1,2088 @@
+openapi: 3.0.0
+info:
+  title: API Documentation
+  version: 1.0.0
+  description: API documentation for the project, generated based on the provided source code.
+servers:
+  - url: /
+    description: Local server
+
+components:
+  schemas:
+    # User Schemas
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: User ID.
+          example: 1
+        name:
+          type: string
+          description: User's full name.
+          example: 'John Doe'
+        email:
+          type: string
+          format: email
+          description: User's email address.
+          example: 'john.doe@example.com'
+      required:
+        - id
+        - name
+        - email
+    UserCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 5
+          maxLength: 250
+          description: User's full name.
+          example: 'John Doe'
+        email:
+          type: string
+          format: email
+          description: User's email address.
+          example: 'john.doe@example.com'
+        password:
+          type: string
+          format: password
+          minLength: 10
+          description: User's password.
+          example: 'yourSecurePassword123'
+      required:
+        - name
+        - email
+        - password
+    UserLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: User's email address.
+          example: 'john.doe@example.com'
+        password:
+          type: string
+          format: password
+          description: User's password.
+          example: 'yourSecurePassword123'
+      required:
+        - email
+        - password
+    UserUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 5
+          maxLength: 250
+          description: User's new full name (optional).
+          example: 'Johnathan Doe'
+        email:
+          type: string
+          format: email
+          description: User's new email address (optional).
+          example: 'johnathan.doe@example.com'
+        password:
+          type: string
+          format: password
+          minLength: 10
+          description: User's new password (optional).
+          example: 'newSecurePassword456'
+
+    # Project Schemas
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Project ID.
+          example: 101
+        title:
+          type: string
+          description: Project title.
+          example: 'My Awesome Project'
+        description:
+          type: string
+          description: Project description.
+          example: 'This project aims to achieve world peace.'
+        ownerUserId:
+          type: integer
+          description: ID of the user who owns the project.
+          example: 1
+      required:
+        - id
+        - title
+        - description
+        - ownerUserId
+    ProjectCreate:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Project title.
+          example: 'New Initiative'
+        description:
+          type: string
+          description: Project description.
+          example: 'Details about the new initiative.'
+      required:
+        - title
+        - description
+    ProjectUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          description: New project title (optional).
+          example: 'Updated Initiative Name'
+        description:
+          type: string
+          description: New project description (optional).
+          example: 'Updated details about the initiative.'
+        ownerUserId:
+           type: integer
+           description: New owner user ID (optional).
+           example: 2
+
+    # Page Schemas
+    Page:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 501
+        title:
+          type: string
+          example: 'Introduction'
+        description:
+          type: string
+          nullable: true
+          example: 'Overview of the project goals.'
+        emoji:
+          type: string
+          nullable: true
+          example: '🚀'
+        nextSiblingId:
+          type: integer
+          nullable: true
+          example: 502
+        parentId:
+          type: integer
+          nullable: true
+          example: null
+        projectId:
+          type: integer
+          example: 101
+        moduleId:
+          type: integer
+          nullable: true
+          example: 1
+      required:
+        - id
+        - title
+        - projectId
+    PageCreate:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 5
+          example: 'Chapter 1'
+        description:
+          type: string
+          nullable: true
+          example: 'Content for the first chapter.'
+        emoji:
+          type: string
+          nullable: true
+          example: '📄'
+        nextSiblingId:
+          type: integer
+          nullable: true
+          example: 503
+        parentId:
+          type: integer
+          nullable: true
+          example: 501
+        moduleId:
+          type: integer
+          nullable: true
+          example: 1
+      required:
+        - title
+    PageUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 5
+          nullable: true
+          example: 'Updated Chapter 1'
+        description:
+          type: string
+          nullable: true
+          example: 'Revised content for the first chapter.'
+        emoji:
+          type: string
+          nullable: true
+          example: '📌'
+        nextSiblingId:
+          type: integer
+          nullable: true
+          example: 504
+        parentId:
+          type: integer
+          nullable: true
+          example: 500
+        moduleId:
+          type: integer
+          nullable: true
+          example: 2
+    PageSetModule:
+      type: object
+      properties:
+        moduleTitle:
+          type: string
+          description: The title of the module to set for the page.
+          example: 'notes'
+      required:
+        - moduleTitle
+
+    # SharedProject Schemas
+    SharedProject:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        roleId:
+          type: integer
+          example: 3
+        userId:
+          type: integer
+          example: 2
+        projectId:
+          type: integer
+          example: 101
+      required:
+        - id
+        - roleId
+        - userId
+        - projectId
+    UserSharedProject: # Based on UserSharedProject type
+        type: object
+        properties:
+           id:
+             type: integer
+             example: 101
+           title:
+             type: string
+             example: "Shared Project Alpha"
+           description:
+             type: string
+             example: "Project shared for collaboration"
+           owner_user_id:
+             type: integer
+             example: 1
+           shared_user_id:
+             type: integer
+             example: 2
+           role:
+             type: string
+             example: "editor"
+        required:
+          - id
+          - title
+          - description
+          - owner_user_id
+          - shared_user_id
+          - role
+    ProjectMember: # Based on ProjectMember type
+        type: object
+        properties:
+           id:
+             type: integer
+             example: 2
+           name:
+             type: string
+             example: "Jane Collaborator"
+           email:
+             type: string
+             format: email
+             example: "jane.collab@example.com"
+           role:
+             type: string
+             example: "viewer"
+        required:
+          - id
+          - name
+          - email
+          - role
+    ShareProjectCreate:
+      type: object
+      properties:
+        userEmail:
+          type: string
+          format: email
+          example: 'collaborator@example.com'
+        roleTitle:
+          type: string
+          example: 'editor'
+      required:
+        - userEmail
+        - roleTitle
+    ShareProjectEdit:
+      type: object
+      properties:
+        roleTitle:
+          type: string
+          example: 'viewer'
+      required:
+        - roleTitle
+
+    # Role Schemas
+    Role:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: 'admin'
+        description:
+          type: string
+          nullable: true
+          example: 'Administrator role with full access.'
+      required:
+        - id
+        - title
+    RoleWithPermissions: # Based on RoleWithPermissions type
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: 'admin'
+        description:
+          type: string
+          nullable: true
+          example: 'Administrator role with full access.'
+        permissions:
+          type: array
+          items:
+            type: string
+          example: ['viewProject', 'editProject', 'deleteProject']
+      required:
+        - id
+        - title
+        - permissions
+
+    # Module Schemas
+    Module:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: 'notes'
+        description:
+          type: string
+          nullable: true
+          example: 'Module for taking notes.'
+      required:
+        - id
+        - title
+
+    # Subscription Schemas
+    SubscriptionPlan:
+       type: object
+       properties:
+         id:
+           type: integer
+           example: 1
+         title:
+           type: string
+           example: "free"
+         duration:
+           type: string # Representing INTERVAL
+           example: "1 year"
+         price:
+           type: number
+           format: double
+           example: 0.00
+       required:
+         - id
+         - title
+         - duration
+         - price
+    CompleteSubscriptionPlan: # Based on CompleteSubscriptionPlan type
+       type: object
+       properties:
+         id:
+           type: integer
+           example: 2
+         title:
+           type: string
+           example: "plus"
+         duration:
+           type: string # Representing INTERVAL
+           example: "1 month"
+         price:
+           type: number
+           format: double
+           example: 20.00
+         benefits:
+           type: array
+           items:
+             type: string # Assuming titles of benefits are sufficient here
+           example: ["Unlimited projects", "Full access of all modules"]
+         permissions:
+           type: array
+           items:
+             type: string # Assuming titles of permissions are sufficient here
+           example: ["createUnlimitedProjects", "useAllModules"]
+       required:
+         - id
+         - title
+         - duration
+         - price
+         - benefits
+         - permissions
+    UserSubscription: # Based on CompleteUserSubscription type
+      type: object
+      properties:
+         id:
+           type: integer
+           example: 10
+         plan_id:
+           type: integer
+           example: 2
+         created_at:
+           type: string
+           format: date-time
+           example: "2025-04-26T14:34:57.000Z"
+         status:
+           type: string
+           example: "active"
+         user_id:
+           type: integer
+           example: 1
+         plan_title:
+           type: string
+           example: "plus"
+         plan_duration:
+           # Sequelize interval format might be complex, using string for simplicity
+           type: string
+           example: {"months": 1}
+         plan_price:
+           type: number
+           format: double
+           example: 20.00
+      required:
+        - id
+        - plan_id
+        - created_at
+        - status
+        - user_id
+        - plan_title
+        - plan_duration
+        - plan_price
+    ChangeSubscriptionPlan:
+      type: object
+      properties:
+        planTitle:
+          type: string
+          description: The title of the desired subscription plan.
+          example: 'plus'
+      required:
+        - planTitle
+
+    # Feedback Schemas
+    Feedback:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        userId:
+          type: integer
+          example: 1
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+        description:
+          type: string
+          example: 'This app is great!'
+      required:
+        - id
+        - userId
+        - rating
+        - description
+    FeedbackCreate:
+      type: object
+      properties:
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 4
+        description:
+          type: string
+          example: 'Found it very useful.'
+      required:
+        - rating
+        - description
+
+    # Generic Response Schemas
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'The operation was a success.'
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Invalid request.'
+        error:
+          type: # Can be string or object depending on validation
+          example: 'Email or password incorrect'
+    NotFoundResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'The requested resource could not be found.'
+    UnauthorizedResponse:
+        type: object
+        properties:
+          message:
+            type: string
+            example: 'Unauthorized access. You need to be authenticated to perform this action.'
+    ForbiddenResponse:
+        type: object
+        properties:
+          message:
+            type: string
+            example: 'You do not have permission to perform this operation.'
+    InternalErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'There was an internal server error. Please try again later.'
+        error:
+          type: string
+          example: 'Database connection failed' # Example internal error detail
+
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: access_token # Or potentially refresh_token depending on the flow
+      description: Authentication token passed as a cookie.
+
+security:
+  - cookieAuth: []
+
+paths:
+  /users/auth:
+    post:
+      tags: [Users]
+      summary: Login user
+      description: Authenticates a user and returns access and refresh tokens via cookies.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Login successful. Tokens set in cookies.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorized - Email or password incorrect.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+    delete:
+      tags: [Users]
+      summary: Logout user
+      description: Clears the authentication cookies.
+      responses:
+        '200':
+          description: Logout successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /users:
+    post:
+      tags: [Users]
+      summary: Signup user
+      description: Creates a new user account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        '201':
+          description: User created successfully. Returns the new user data (without password). Tokens set in cookies.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                     type: string
+                     example: 'The resource was created successfully.'
+                   resource:
+                      $ref: '#/components/schemas/User'
+        '400':
+           description: Bad Request - Validation error.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error during signup.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+    get:
+      tags: [Users]
+      summary: Get current user
+      security:
+        - cookieAuth: []
+      description: Retrieves the details of the currently authenticated user (based on cookies).
+      responses:
+        '200':
+          description: User details found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                     type: string
+                     example: 'Here is the required resource.'
+                   resource:
+                      $ref: '#/components/schemas/User'
+        '400':
+           description: Bad Request - Could not identify user from token.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+    patch:
+      tags: [Users]
+      summary: Update user
+      security:
+        - cookieAuth: []
+      description: Updates the details of the currently authenticated user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        '201': # Status 201 for update based on constants/responses.ts
+          description: User updated successfully. Returns updated user data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                     type: string
+                     example: 'Success updating the resource.'
+                   resource:
+                      $ref: '#/components/schemas/User'
+        '400':
+           description: Bad Request - Validation error or no user identified.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error during update.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+    delete:
+      tags: [Users]
+      summary: Delete user
+      security:
+        - cookieAuth: []
+      description: Deletes the currently authenticated user account.
+      responses:
+        '200': # Status 200 for delete based on constants/responses.ts
+          description: User deleted successfully.
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/SuccessResponse'
+                 properties:
+                   message:
+                     example: 'The resource was deleted successfully.'
+        '400':
+           description: Bad Request - Could not identify user from token.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error during deletion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /projects:
+    get:
+      tags: [Projects]
+      summary: Get user's projects
+      security:
+        - cookieAuth: []
+      description: Retrieves all projects owned by the authenticated user.
+      responses:
+        '200':
+          description: List of projects owned by the user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                     type: string
+                     example: 'Here is the required resource.'
+                  resource:
+                     type: array
+                     items:
+                       $ref: '#/components/schemas/Project'
+        '400':
+           description: Bad Request - Could not identify user from token.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+    post:
+      tags: [Projects]
+      summary: Create project
+      security:
+        - cookieAuth: []
+      description: Creates a new project for the authenticated user. Subscription limits may apply.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreate'
+      responses:
+        '201':
+          description: Project created successfully. Returns the new project data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                     type: string
+                     example: 'The resource was created successfully.'
+                   resource:
+                     $ref: '#/components/schemas/Project'
+        '400':
+           description: Bad Request - Validation error or could not identify user.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error (e.g., subscription limit exceeded).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse' # Includes potential subscription error message
+
+  /projects/{projectId}:
+    get:
+      tags: [Projects]
+      summary: Get project by ID
+      security:
+        - cookieAuth: []
+      description: Retrieves details of a specific project if the user has 'viewProject' permission.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project to retrieve.
+      responses:
+        '200':
+          description: Project details found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                     type: string
+                     example: 'Here is the required resource.'
+                   resource:
+                     $ref: '#/components/schemas/Project'
+        '400':
+           description: Bad Request - Invalid projectId format.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'viewProject' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: Not Found - Project with the given ID not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+    patch:
+      tags: [Projects]
+      summary: Update project
+      security:
+        - cookieAuth: []
+      description: Updates details of a specific project if the user has 'editProject' permission.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectUpdate'
+      responses:
+        '201': # Status 201 for update
+          description: Project updated successfully. Returns the updated project data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                     type: string
+                     example: 'Success updating the resource.'
+                   resource:
+                     $ref: '#/components/schemas/Project'
+        '400':
+           description: Bad Request - Invalid projectId format or validation error.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'editProject' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: Not Found - Project with the given ID not found or update failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+    delete:
+      tags: [Projects]
+      summary: Delete project
+      security:
+        - cookieAuth: []
+      description: Deletes a specific project if the user has 'deleteProject' permission (typically the owner).
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project to delete.
+      responses:
+        '200': # Status 200 for delete
+          description: Project deleted successfully.
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/SuccessResponse'
+                 properties:
+                   message:
+                     example: 'The resource was deleted successfully.'
+        '400':
+           description: Bad Request - Invalid projectId format.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'deleteProject' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: Not Found - Project with the given ID not found or deletion failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /projects/{projectId}/pages:
+    get:
+      tags: [Pages]
+      summary: Get project pages
+      security:
+        - cookieAuth: []
+      description: Retrieves all pages within a specific project if the user has 'viewPages' permission.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project whose pages are to be retrieved.
+      responses:
+        '200':
+          description: List of pages in the project.
+          content:
+            application/json:
+              schema:
+                 type: object
+                 properties:
+                   message:
+                     type: string
+                     example: 'Here is the required resource.'
+                   resource:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Page'
+        '400':
+           description: Bad Request - Invalid projectId format.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'viewPages' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: Not Found - Project not found.
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+    post:
+      tags: [Pages]
+      summary: Create page
+      security:
+        - cookieAuth: []
+      description: Creates a new page within a specific project if the user has 'createPages' permission.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project to add the page to.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageCreate'
+      responses:
+        '201':
+          description: Page created successfully. Returns the new page data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                     type: string
+                     example: 'The resource was created successfully.'
+                   resource:
+                     $ref: '#/components/schemas/Page'
+        '400':
+           description: Bad Request - Invalid projectId format or validation error.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'createPages' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /projects/{projectId}/pages/{id}:
+    get:
+      tags: [Pages]
+      summary: Get page by ID
+      security:
+        - cookieAuth: []
+      description: Retrieves details of a specific page within a project if the user has 'viewPages' permission.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project containing the page.
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the page to retrieve.
+      responses:
+        '200':
+          description: Page details found.
+          content:
+            application/json:
+              schema:
+                 type: object
+                 properties:
+                   message:
+                     type: string
+                     example: 'Here is the required resource.'
+                   resource:
+                     $ref: '#/components/schemas/Page'
+        '400':
+           description: Bad Request - Invalid projectId or page id format.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'viewPages' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: Not Found - Project or Page not found.
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+    patch:
+      tags: [Pages]
+      summary: Update page
+      security:
+        - cookieAuth: []
+      description: Updates details of a specific page if the user has 'editPages' permission.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project containing the page.
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the page to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageUpdate'
+      responses:
+        '201': # Status 201 for update
+          description: Page updated successfully. Returns the updated page data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                     type: string
+                     example: 'Success updating the resource.'
+                   resource:
+                     $ref: '#/components/schemas/Page'
+        '400':
+           description: Bad Request - Invalid IDs or validation error.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'editPages' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: Not Found - Project or Page not found, or update failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+    delete:
+      tags: [Pages]
+      summary: Delete page
+      security:
+        - cookieAuth: []
+      description: Deletes a specific page if the user has 'deletePages' permission.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project containing the page.
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the page to delete.
+      responses:
+        '200': # Status 200 for delete
+          description: Page deleted successfully.
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/SuccessResponse'
+                 properties:
+                   message:
+                     example: 'The resource was deleted successfully.'
+        '400':
+           description: Bad Request - Invalid IDs.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'deletePages' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: Not Found - Project or Page not found, or deletion failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /projects/{projectId}/pages/{id}/modules:
+    patch:
+      tags: [Pages]
+      summary: Set page module
+      security:
+        - cookieAuth: []
+      description: Sets or changes the module associated with a specific page if the user has 'editPages' permission.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project containing the page.
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the page to set the module for.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageSetModule'
+      responses:
+        '201': # Using 201 as it modifies the resource state
+          description: Page module updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Success updating the resource.'
+        '400':
+           description: Bad Request - Invalid IDs or module title, or validation error.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'editPages' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: Not Found - Project, Page, or Module not found, or update failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /projects/{projectId}/pages/{id}/childrens:
+     get:
+      tags: [Pages]
+      summary: Get child pages
+      security:
+        - cookieAuth: []
+      description: Retrieves all direct child pages of a specific page if the user has 'viewPages' permission.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project containing the pages.
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the parent page whose children are to be retrieved.
+      responses:
+        '200':
+          description: List of child pages.
+          content:
+            application/json:
+              schema:
+                 type: object
+                 properties:
+                   message:
+                     type: string
+                     example: 'Here is the required resource.'
+                   resource:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Page'
+        '400':
+           description: Bad Request - Invalid IDs.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'viewPages' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: Not Found - Project or Parent Page not found.
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /projects/shared:
+    get:
+      tags: [Sharing]
+      summary: Get shared projects
+      security:
+        - cookieAuth: []
+      description: Retrieves all projects that have been shared with the authenticated user.
+      responses:
+        '200':
+          description: List of projects shared with the user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                     type: string
+                     example: 'Here is the required resource.'
+                  resource:
+                     type: array
+                     items:
+                       $ref: '#/components/schemas/UserSharedProject'
+        '400':
+           description: Bad Request - Could not identify user from token.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - No projects shared with the user.
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /projects/{projectId}/members:
+    get:
+      tags: [Sharing]
+      summary: Get project members
+      security:
+        - cookieAuth: []
+      description: Retrieves the list of members (users) a project is shared with, if the user has 'viewProjectShares' permission. Can optionally filter by user email.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project whose members are to be retrieved.
+        - name: userEmail
+          in: query
+          required: false
+          schema:
+            type: string
+            format: email
+          description: Optional email to filter for a specific member.
+      responses:
+        '200':
+          description: List of project members or a single member if filtered.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                     type: string
+                     example: 'Here is the required resource.'
+                  resource:
+                     oneOf: # Can return one or many
+                       - type: array
+                         items:
+                           $ref: '#/components/schemas/ProjectMember'
+                       - $ref: '#/components/schemas/ProjectMember'
+        '400':
+           description: Bad Request - Invalid projectId format or email format.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'viewProjectShares' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '404':
+          description: Not Found - Project not found, or no members found (or specific member not found if filtered).
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+    post:
+      tags: [Sharing]
+      summary: Share project
+      security:
+        - cookieAuth: []
+      description: Shares the project with another user by email, assigning them a specific role, if the user has 'shareProject' permission. Subscription limits may apply.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project to share.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShareProjectCreate'
+      responses:
+        '201':
+          description: Project shared successfully. Returns the share details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                     type: string
+                     example: 'The resource was created successfully.'
+                   resource:
+                     $ref: '#/components/schemas/SharedProject'
+        '400':
+           description: Bad Request - Invalid projectId, email format, role title, or validation error.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'shareProject' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '500':
+          description: Internal server error (e.g., user/role/project not found, cannot share with owner, subscription limit exceeded).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse' # Includes potential share limit error
+    patch:
+      tags: [Sharing]
+      summary: Change member role
+      security:
+        - cookieAuth: []
+      description: Changes the role of a user the project is shared with, if the user has 'changeProjectShareRoles' permission.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project where the member's role will be changed.
+        - name: userEmail
+          in: query
+          required: true
+          schema:
+            type: string
+            format: email
+          description: Email of the member whose role is to be changed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShareProjectEdit'
+      responses:
+        '201': # Using 201 for update consistency
+          description: Member role updated successfully.
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/SuccessResponse'
+                 properties:
+                   message:
+                     example: 'Success updating the resource.'
+        '400':
+           description: Bad Request - Invalid projectId, email format, role title, or validation error.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'changeProjectShareRoles' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '500':
+          description: Internal server error (e.g., user/role/project/share not found or update failed).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+    delete:
+      tags: [Sharing]
+      summary: Unshare project
+      security:
+        - cookieAuth: []
+      description: Removes a user from the project's shared members list, if the user has 'unshareProject' permission.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project to unshare from.
+        - name: userEmail
+          in: query
+          required: true
+          schema:
+            type: string
+            format: email
+          description: Email of the member to remove.
+      responses:
+        '200': # Status 200 for delete
+          description: Project unshared successfully from the user.
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/SuccessResponse'
+                 properties:
+                   message:
+                     example: 'The resource was deleted successfully.'
+        '400':
+           description: Bad Request - Invalid projectId or email format.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks 'unshareProject' permission.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenResponse'
+        '500':
+          description: Internal server error (e.g., user/project/share not found or deletion failed).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /projects/{projectId}/members/permissions/{permission}:
+    get:
+      tags: [Sharing, Permissions]
+      summary: Verify project member permission
+      security:
+        - cookieAuth: []
+      description: Checks if the *currently authenticated user* has a specific permission within the context of a given project (either as owner or via their role in a shared project).
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID of the project context.
+        - name: permission
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The permission title to check (e.g., 'editPages', 'viewStats').
+      responses:
+        '200':
+          description: Returns whether the user has the specified permission.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                     type: string
+                     example: 'Here is the required resource.'
+                  resource:
+                     type: boolean
+                     example: true
+        '400':
+           description: Bad Request - Invalid projectId, missing permission, or could not identify user.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error during permission check.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /tokens/validity:
+    get:
+      tags: [Tokens]
+      summary: Verify token validity
+      security:
+        - cookieAuth: [] # Assumes cookie needs checking
+      description: Checks if the access token provided via cookie is still valid.
+      responses:
+        '200':
+          description: Access token is valid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'The access token is valid'
+        '401':
+          description: Unauthorized - Access token is not valid or expired.
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+                 properties:
+                   message:
+                      example: 'The access token is not valid'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /roles:
+    get:
+      tags: [Roles]
+      summary: Get all roles
+      description: Retrieves a list of all available roles in the system.
+      responses:
+        '200':
+          description: List of all roles.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                     type: string
+                     example: 'Here is the required resource.'
+                  resource:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Role'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /roles/{title}:
+    get:
+      tags: [Roles]
+      summary: Get role by title
+      description: Retrieves details and associated permissions for a specific role by its title.
+      parameters:
+        - name: title
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Title of the role to retrieve (e.g., 'admin', 'editor').
+      responses:
+        '200':
+          description: Role details including permissions found.
+          content:
+            application/json:
+              schema:
+                 type: object
+                 properties:
+                   message:
+                     type: string
+                     example: 'Here is the required resource.'
+                   resource:
+                     $ref: '#/components/schemas/RoleWithPermissions'
+        '400':
+           description: Bad Request - Invalid role title format.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - Role with the given title not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /modules:
+    get:
+      tags: [Modules]
+      summary: Get all modules
+      description: Retrieves a list of all available modules (e.g., notes, calendar).
+      responses:
+        '200':
+          description: List of all modules.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                     type: string
+                     example: 'Here is the required resource.'
+                  resource:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Module'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /subscriptions/active:
+    get:
+      tags: [Subscriptions]
+      summary: Get active subscription
+      security:
+        - cookieAuth: []
+      description: Retrieves details of the authenticated user's currently active subscription plan.
+      responses:
+        '200':
+          description: Active subscription plan details found.
+          content:
+            application/json:
+              schema:
+                 type: object
+                 properties:
+                   message:
+                     type: string
+                     example: 'Here is the required resource.'
+                   resource:
+                     $ref: '#/components/schemas/UserSubscription'
+        '400':
+           description: Bad Request - Could not identify user from token.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found - No active subscription found for the user.
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /subscriptions/active/permissions/{permission}:
+    get:
+      tags: [Subscriptions, Permissions]
+      summary: Verify subscription permission
+      security:
+        - cookieAuth: []
+      description: Checks if the authenticated user's *active subscription* grants a specific permission.
+      parameters:
+        - name: permission
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The permission title to check (e.g., 'createUnlimitedProjects').
+      responses:
+        '200':
+          description: Returns whether the user's subscription grants the permission.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                     type: string
+                     example: 'Here is the required resource.'
+                  resource:
+                     type: boolean
+                     example: false
+        '400':
+           description: Bad Request - Missing permission or could not identify user.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error during permission check.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /subscriptions:
+    patch:
+      tags: [Subscriptions]
+      summary: Change subscription plan
+      security:
+        - cookieAuth: []
+      description: Changes the authenticated user's subscription plan to the specified plan title. This disables the current plan and activates the new one.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeSubscriptionPlan'
+      responses:
+        '201': # Using 201 for update
+          description: Subscription plan changed successfully. Returns the new active plan details (without benefits/perms).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                     type: string
+                     example: 'Success updating the resource.'
+                   resource:
+                     $ref: '#/components/schemas/SubscriptionPlan' # Returns base plan info
+        '400':
+           description: Bad Request - Invalid plan title or could not identify user.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error (e.g., plan not found, failed to update/create subscription records).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /subscriptions/plans:
+    get:
+      tags: [Subscriptions]
+      summary: Get subscription plans
+      description: Retrieves a list of all available subscription plans, or details of a specific plan if filtered by title.
+      parameters:
+        - name: title
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Optional title to filter for a specific subscription plan.
+      responses:
+        '200':
+          description: List of subscription plans or details of a specific plan.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                     type: string
+                     example: 'Here is the required resource.'
+                   resource:
+                     oneOf:
+                       - type: array # All plans (base info)
+                         items:
+                           $ref: '#/components/schemas/SubscriptionPlan'
+                       - $ref: '#/components/schemas/CompleteSubscriptionPlan' # Single plan (detailed info)
+        '404':
+          description: Not Found - Specific plan title not found when filtering.
+          content:
+            application/json:
+              schema:
+                 $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  /feedbacks:
+    get:
+      tags: [Feedbacks]
+      summary: Get all feedbacks
+      # Potentially restricted access - assuming admin or specific permission needed, but not explicit in routes
+      # security:
+      #  - cookieAuth: []
+      description: Retrieves all feedback submitted by users. Access might be restricted.
+      responses:
+        '200':
+          description: List of all feedbacks.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                     type: string
+                     example: 'Here is the required resource.'
+                  resource:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Feedback'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+    post:
+      tags: [Feedbacks]
+      summary: Create feedback
+      security:
+        - cookieAuth: []
+      description: Allows an authenticated user to submit feedback.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackCreate'
+      responses:
+        '201':
+          description: Feedback created successfully. Returns the created feedback data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   message:
+                     type: string
+                     example: 'The resource was created successfully.'
+                   resource:
+                     $ref: '#/components/schemas/Feedback'
+        '400':
+           description: Bad Request - Validation error or could not identify user.
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalErrorResponse'
+
+  # Catch-all for undefined routes - Usually not documented in Swagger itself
+  # '/*':
+  #   get: ...
+  #   post: ...
+  #   delete: ...
+  #   patch: ...
+  #   put: ...
+  #   options: ...
+  #     responses:
+  #       '404':
+  #          description: Endpoint not found.
+  #          content:
+  #            application/json:
+  #               schema:
+  #                 type: object
+  #                 properties:
+  #                   message:
+  #                     type: string
+  #                     example: "Endpoint not found"

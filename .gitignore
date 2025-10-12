@@ -1,0 +1,11 @@
+# Production
+dist/
+
+# Development
+package-lock.json
+node_modules/
+.env
+
+# Tests and logs
+report/
+
