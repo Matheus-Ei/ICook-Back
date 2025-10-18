@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { AbstractMiddleware } from './AbstractMiddleware';
-import { logger } from '../utils/logger';
+import { logger } from '../helpers/logger';
 import { injectable } from 'inversify';
 
 @injectable()

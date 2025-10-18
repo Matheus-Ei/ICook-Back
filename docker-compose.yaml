@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:17
-    container_name: struct_postgres
+    container_name: icook_postgres
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}

@@ -20,7 +20,8 @@ CREATE TABLE recipes (
 
   owner_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
 
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE recipe_images (
@@ -29,7 +30,8 @@ CREATE TABLE recipe_images (
   recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE,
   image_base64 TEXT NOT NULL,
 
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE recipe_comments (
@@ -39,7 +41,8 @@ CREATE TABLE recipe_comments (
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   comment TEXT NOT NULL,
 
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE recipe_rates (
@@ -50,6 +53,7 @@ CREATE TABLE recipe_rates (
   rate INTEGER CHECK (rate >= 1 AND rate <= 5) NOT NULL,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   UNIQUE(recipe_id, user_id)
 );
@@ -61,6 +65,7 @@ CREATE TABLE user_saved_recipes (
   recipe_id INTEGER REFERENCES recipes(id) ON DELETE CASCADE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   UNIQUE(user_id, recipe_id)
 );
@@ -72,6 +77,7 @@ CREATE TABLE user_follows (
   followed_user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   UNIQUE(follower_user_id, followed_user_id)
 );

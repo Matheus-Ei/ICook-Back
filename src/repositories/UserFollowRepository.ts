@@ -1,0 +1,86 @@
+import { UserFollow } from '../entities/UserFollow';
+import { AsyncMaybe, Editable } from '../types';
+import { injectable } from 'inversify';
+import { Transaction } from 'sequelize';
+import { UserFollowsModel } from '../models/UserFollowsModel';
+
+type EntityType = UserFollow;
+type ModelType = UserFollowsModel;
+
+const Entity = UserFollow;
+const Model = UserFollowsModel;
+
+@injectable()
+export class UserFollowRepository {
+  private createObject = (data: ModelType | null): EntityType | null => {
+    return data
+      ? new Entity(
+          data.id,
+          data.followerUserId,
+          data.followedUserId
+        )
+      : null;
+  };
+
+  findById = async (id: number): AsyncMaybe<EntityType> => {
+    return this.createObject(await Model.findByPk(id));
+  };
+
+  follow = async (
+    followedUserId: number,
+    followerUserId: number,
+    transaction?: Transaction
+  ): AsyncMaybe<EntityType> => {
+    return this.createObject(
+      await Model.create(
+        { followedUserId, followerUserId },
+        { transaction }
+      )
+    );
+  };
+
+  isFollowed = async (followedUserId: number, followerUserId: number): AsyncMaybe<EntityType> => {
+    return this.createObject(
+      await Model.findOne({
+        where: { followedUserId, followerUserId },
+      })
+    );
+  };
+
+  unfollow = async (followedUserId: number, followerUserId: number): Promise<boolean> => {
+    const deletedCount = await Model.destroy({
+      where: { followedUserId, followerUserId },
+    });
+    return deletedCount > 0;
+  };
+
+
+  getAll = async (): AsyncMaybe<EntityType[]> => {
+    return await Model.findAll();
+  };
+
+  create = async (
+    data: Omit<EntityType, 'id'>,
+    transaction?: Transaction
+  ): AsyncMaybe<EntityType> => {
+    return this.createObject(await Model.create(data, { transaction }));
+  };
+
+  deleteById = async (id: number): Promise<boolean> => {
+    const deletedId = await Model.destroy({ where: { id } });
+    return deletedId ? true : false;
+  };
+
+  updateById = async (
+    id: number,
+    data: Editable<EntityType>
+  ): Promise<boolean> => {
+    const [affectedCount] = await Model.update(data, {
+      where: { id },
+      returning: true,
+    });
+
+    if (affectedCount > 0) return true;
+    return false;
+  };
+}

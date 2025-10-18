@@ -3,7 +3,7 @@ import { AbstractMiddleware } from './AbstractMiddleware';
 import { TokenService } from '../services/TokenService';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../providers/types';
-import { Res } from '../utils/response';
+import { Res } from '../utils/Res';
 
 @injectable()
 export class AuthMiddleware extends AbstractMiddleware {

@@ -1,21 +1,21 @@
 import { Request } from 'express';
 import multer, { StorageEngine, FileFilterCallback, Multer } from 'multer';
 
-export interface ImageUploadOptions {
+export interface FileUploadOptions {
   fileSizeLimit?: number;
   storageEngine?: StorageEngine;
 }
 
-export class ImageUpload {
+export class ImageUploadMiddleware {
   private multerInstance: Multer;
 
-  constructor(options?: ImageUploadOptions) {
+  constructor(options?: FileUploadOptions) {
     const { fileSizeLimit = 5 * 1024 * 1024, storageEngine } = options || {};
     const storage = storageEngine || multer.memoryStorage();
 
     this.multerInstance = multer({
       storage,
-      fileFilter: ImageUpload.imageFileFilter,
+      fileFilter: ImageUploadMiddleware.imageFileFilter,
       limits: { fileSize: fileSizeLimit },
     });
   }

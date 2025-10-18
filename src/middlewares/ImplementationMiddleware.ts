@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { injectable } from 'inversify';
-import { Res } from '../utils/response';
+import { Res } from '../utils/Res';
 
 @injectable()
 export class ImplementationMiddleware {

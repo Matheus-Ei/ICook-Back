@@ -13,7 +13,7 @@ import { LoggerMiddleware } from './middlewares/LoggerMiddleware';
 import { AuthMiddleware } from './middlewares/AuthMiddleware';
 import { container } from './providers/container';
 import { TYPES } from './providers/types';
-import { logger } from './utils/logger';
+import { logger } from './helpers/logger';
 import { ENV } from './constants/enviroment';
 import { ROUTES } from './constants/routes';
 import { Database } from './database';

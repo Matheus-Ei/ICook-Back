@@ -1,44 +1,75 @@
+import { inject } from 'inversify';
+import { User } from '../entities/User';
 import { UsersModel } from '../models/UsersModel';
 import { AsyncMaybe, Editable } from '../types';
-import { User } from '../entities/User';
 import { injectable } from 'inversify';
-import { Transaction } from 'sequelize';
+import { QueryTypes, Sequelize, Transaction } from 'sequelize';
+import { TYPES } from '../providers/types';
+import { Database } from '../database';
+import { CompleteUserType } from '../types/Users';
+
+type EntityType = User;
+type ModelType = UsersModel;
+
+const Entity = User;
+const Model = UsersModel;
 
 @injectable()
 export class UserRepository {
-  private createObject = (user: UsersModel | null): User | null => {
-    return user
-      ? new User(user.id, user.name, user.email, user.password)
+  private database: Sequelize;
+
+  constructor(
+    @inject(TYPES.Database) database: Database
+  ) {
+    this.database = database.getDatabase();
+  }
+
+  private createObject = (data: ModelType | null): EntityType | null => {
+    return data
+      ? new Entity(data.id, data.name, data.email, data.password)
       : null;
   };
 
-  findById = async (id: number): AsyncMaybe<User> => {
-    return this.createObject(await UsersModel.findByPk(id));
+  findById = async (id: number): AsyncMaybe<CompleteUserType> => {
+    const response = await this.database.query<CompleteUserType>(
+      `
+      SELECT
+        u.id,
+        u.name,
+        u.email,
+        COUNT(uf.id) as "followersCount"
+      FROM users u
+      LEFT JOIN user_follows uf ON u.id = uf.followed_user_id
+      WHERE u.id = :id
+      GROUP BY u.id
+    `,
+      { type: QueryTypes.SELECT, replacements: { id } }
+    )
+
+    return response[0] || null;
   };
 
-  findByEmail = async (email: string): AsyncMaybe<User> => {
-    return this.createObject(await UsersModel.findOne({ where: { email } }));
+  findByEmail = async (email: string): AsyncMaybe<EntityType> => {
+    return this.createObject(await Model.findOne({ where: { email } }));
   };
 
   create = async (
-    userData: Omit<User, 'id'>,
+    data: Omit<EntityType, 'id'>,
     transaction?: Transaction
-  ): AsyncMaybe<User> => {
-    return this.createObject(
-      await UsersModel.create(userData, { transaction })
-    );
+  ): AsyncMaybe<EntityType> => {
+    return this.createObject(await Model.create(data, { transaction }));
   };
 
   deleteById = async (id: number): Promise<boolean> => {
-    const deletedId = await UsersModel.destroy({ where: { id } });
+    const deletedId = await Model.destroy({ where: { id } });
     return deletedId ? true : false;
   };
 
   updateById = async (
     id: number,
-    userData: Editable<User>
+    data: Editable<EntityType>
   ): Promise<boolean> => {
-    const [affectedCount] = await UsersModel.update(userData, {
+    const [affectedCount] = await Model.update(data, {
       where: { id },
       returning: true,
     });

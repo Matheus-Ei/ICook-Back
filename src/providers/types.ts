@@ -2,10 +2,20 @@ export const TYPES = {
   // Controllers
   TokenController: Symbol.for('TokenController'),
   UserController: Symbol.for('UserController'),
+  RecipeController: Symbol.for('RecipeController'),
+  RecipeCommentController: Symbol.for('RecipeCommentController'),
+  RecipeRateController: Symbol.for('RecipeRateController'),
+  UserSavedRecipeController: Symbol.for('UserSavedRecipeController'),
+  UserFollowController: Symbol.for('UserFollowController'),
 
   // Services
   TokenService: Symbol.for('TokenService'),
   UserService: Symbol.for('UserService'),
+  RecipeService: Symbol.for('RecipeService'),
+  RecipeCommentService: Symbol.for('RecipeCommentService'),
+  RecipeRateService: Symbol.for('RecipeRateService'),
+  UserSavedRecipeService: Symbol.for('UserSavedRecipeService'),
+  UserFollowService: Symbol.for('UserFollowService'),
 
   // Middlewares
   AuthMiddleware: Symbol.for('AuthMiddleware'),
@@ -16,11 +26,22 @@ export const TYPES = {
 
   // Repositories
   UserRepository: Symbol.for('UserRepository'),
+  RecipeRepository: Symbol.for('RecipeRepository'),
+  RecipeImageRepository: Symbol.for('RecipeImageRepository'),
+  RecipeRateRepository: Symbol.for('RecipeRateRepository'),
+  RecipeCommentRepository: Symbol.for('RecipeCommentRepository'),
+  UserSavedRecipeRepository: Symbol.for('UserSavedRecipeRepository'),
+  UserFollowRepository: Symbol.for('UserFollowRepository'),
 
   // Routes
   NotFoundRoute: Symbol.for('NotFoundRoute'),
   TokenRoute: Symbol.for('TokenRoute'),
   UserRoute: Symbol.for('UserRoute'),
+  RecipeRoute: Symbol.for('RecipeRoute'),
+  RecipeCommentRoute: Symbol.for('RecipeCommentRoute'),
+  RecipeRateRoute: Symbol.for('RecipeRateRoute'),
+  UserSavedRecipeRoute: Symbol.for('UserSavedRecipeRoute'),
+  UserFollowRoute: Symbol.for('UserFollowRoute'),
 
   // Database
   Database: Symbol.for('Database'),

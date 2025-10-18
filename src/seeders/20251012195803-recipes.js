@@ -19,8 +19,7 @@ module.exports = {
         },
         {
           title: 'Frango Xadrez Simples',
-          description:
-            'Receita clássica de frango xadrez para fazer em casa.',
+          description: 'Receita clássica de frango xadrez para fazer em casa.',
           ingredients:
             '500g de peito de frango em cubos, 1 pimentão verde, 1 pimentão vermelho, 1 cebola, 2 colheres de sopa de shoyu, 1 colher de sopa de amido de milho, amendoim a gosto.',
           instructions:
@@ -53,8 +52,7 @@ module.exports = {
         },
         {
           title: 'Mousse de Maracujá Rápido',
-          description:
-            'Sobremesa fácil e deliciosa com apenas 3 ingredientes.',
+          description: 'Sobremesa fácil e deliciosa com apenas 3 ingredientes.',
           ingredients:
             '1 lata de leite condensado, 1 lata de creme de leite, 1 lata de suco de maracujá concentrado (use a lata de leite condensado como medida).',
           instructions:
