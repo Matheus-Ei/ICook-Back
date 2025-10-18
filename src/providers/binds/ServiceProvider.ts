@@ -1,5 +1,6 @@
 import { binder } from '../../helpers/binder';
 import { RecipeCommentService } from '../../services/RecipeCommentService';
+import { RecipeRateService } from '../../services/RecipeRateService';
 import { RecipeService } from '../../services/RecipeService';
 
 // Services
@@ -10,3 +11,4 @@ binder(TokenService, 'TokenService');
 binder(UserService, 'UserService');
 binder(RecipeService, 'RecipeService');
 binder(RecipeCommentService, 'RecipeCommentService');
+binder(RecipeRateService, 'RecipeRateService');

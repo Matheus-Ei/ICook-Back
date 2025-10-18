@@ -27,6 +27,10 @@ export class RecipeRateRepository {
     return this.createObject(await Model.findByPk(id));
   };
 
+  findOne = async (options: object): AsyncMaybe<EntityType> => {
+    return this.createObject(await Model.findOne(options));
+  };
+
   getAll = async (): AsyncMaybe<EntityType[]> => {
     return await Model.findAll();
   };

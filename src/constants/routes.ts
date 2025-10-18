@@ -8,6 +8,7 @@ import { AbstractRoute } from '../routes/AbstractRoute';
 import { NotFoundRoute } from '../routes/NotFoundRoute';
 import { RecipeRoute } from '../routes/RecipeRoute';
 import { RecipeCommentRoute } from '../routes/RecipeCommentRoute';
+import { RecipeRateRoute } from '../routes/RecipeRateRoute';
 
 interface RouteType {
   endpoint: string;
@@ -24,6 +25,8 @@ export const ROUTES: RouteType[] = [
   { endpoint: '/recipes', router: getRouter<RecipeRoute>('RecipeRoute') },
 
   { endpoint: '/recipes/comments', router: getRouter<RecipeCommentRoute>('RecipeCommentRoute') },
+
+  { endpoint: '/recipes/rates', router: getRouter<RecipeRateRoute>('RecipeRateRoute') },
 
   { endpoint: '/', router: getRouter<NotFoundRoute>('NotFoundRoute') },
 ];

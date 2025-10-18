@@ -15,7 +15,7 @@ export class RecipeCommentService {
     const created = await this.repository.create(data);
 
     if (!created) {
-      throw new Error('The recipe was not created');
+      throw new Error('The recipe comment was not created');
     }
 
     return created;

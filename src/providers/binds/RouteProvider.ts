@@ -6,9 +6,11 @@ import { NotFoundRoute } from '../../routes/NotFoundRoute';
 import { TokenRoute } from '../../routes/TokenRoute';
 import { RecipeRoute } from '../../routes/RecipeRoute';
 import { RecipeCommentRoute } from '../../routes/RecipeCommentRoute';
+import { RecipeRateRoute } from '../../routes/RecipeRateRoute';
 
 binder(NotFoundRoute, 'NotFoundRoute');
 binder(TokenRoute, 'TokenRoute');
 binder(UserRoute, 'UserRoute');
 binder(RecipeRoute, 'RecipeRoute');
 binder(RecipeCommentRoute, 'RecipeCommentRoute');
+binder(RecipeRateRoute, 'RecipeRateRoute');
