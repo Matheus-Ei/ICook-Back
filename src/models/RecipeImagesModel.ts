@@ -4,7 +4,7 @@ import { AbstractModel } from './AbstractModel';
 export class RecipeImagesModel extends AbstractModel<RecipeImagesModel> {
   declare id: CreationOptional<number>;
   declare recipeId: number;
-  declare imageBase64: number;
+  declare imageBase64: string;
   declare createdAt?: Date;
   declare updatedAt?: Date;
 
