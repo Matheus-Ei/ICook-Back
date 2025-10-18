@@ -30,12 +30,6 @@ export class UserRoute extends AbstractRoute {
       this.controller.signup
     );
 
-    this.router.patch(
-      '/',
-      this.validator.body(Schema.update()),
-      this.controller.update
-    );
-
     this.router.delete('/', this.controller.delete);
 
     this.router.get('/', this.controller.get);

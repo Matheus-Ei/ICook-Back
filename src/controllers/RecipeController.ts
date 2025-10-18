@@ -53,27 +53,17 @@ export class RecipeController {
     }
   };
 
-  update = async (req: Request, res: Response) => {
-    try {
-      req.body.ownerUserId = Number(this.tokenService.getUserId(req));
-      const updated = await this.service.update(
-        Number(req.params.id),
-        req.body
-      );
-
-      const currentUserId = Number(this.tokenService.getUserId(req));
-      const data = await this.service.get(Number(req.params.id), currentUserId);
-
-      if (!updated || !data) return Res.sendByType(res, 'notFound');
-
-      return Res.sendByType<EntityType>(res, 'updated', undefined, data);
-    } catch (error) {
-      return Res.sendByType(res, 'internalError', error);
-    }
-  };
-
   delete = async (req: Request, res: Response) => {
     try {
+      const currentUserId = Number(this.tokenService.getUserId(req));
+      const recipe = await this.service.get(Number(req.params.id), currentUserId);
+      if (!recipe) return Res.sendByType(res, 'notFound');
+
+      // Verify permissions
+      if (recipe.ownerUserId !== currentUserId) {
+        return Res.sendByType(res, 'forbidden');
+      }
+
       const isDeleted = await this.service.delete(Number(req.params.id));
       if (!isDeleted) return Res.sendByType(res, 'notFound');
 

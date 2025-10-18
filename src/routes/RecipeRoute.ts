@@ -26,12 +26,6 @@ export class RecipeRoute extends AbstractRoute {
       this.controller.create
     );
 
-    this.router.patch(
-      '/:id',
-      this.validator.body(Schema.default()),
-      this.controller.update
-    );
-
     this.router.delete('/:id', this.controller.delete);
 
     this.router.get('/:id', this.controller.get);
