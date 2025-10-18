@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { injectable } from 'inversify';
 import { ZodError, ZodIssue, ZodSchema } from 'zod';
-import { Res } from '../utils/response';
+import { Res } from '../utils/Res';
 
 type validateType = (req: Request, res: Response, next: NextFunction) => void;
 

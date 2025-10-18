@@ -3,8 +3,8 @@ import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 import { TYPES } from '../providers/types';
 import { User } from '../entities/User';
-import { Res } from '../utils/response';
-import { omit } from '../utils/omit';
+import { Res } from '../utils/Res';
+import { omit } from '../helpers/omit';
 import { TokenService } from '../services/TokenService';
 
 @injectable()

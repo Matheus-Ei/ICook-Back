@@ -2,7 +2,7 @@ import { TokenService } from '../services/TokenService';
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 import { TYPES } from '../providers/types';
-import { Res } from '../utils/response';
+import { Res } from '../utils/Res';
 
 @injectable()
 export class TokenController {

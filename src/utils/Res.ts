@@ -1,5 +1,5 @@
 import { RESPONSES } from '../constants/responses';
-import { TreatError } from './error';
+import { TreatError } from './TreatError';
 import { Response } from 'express';
 
 interface ResOptions {

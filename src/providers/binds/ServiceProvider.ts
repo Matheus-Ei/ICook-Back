@@ -1,4 +1,4 @@
-import { binder } from '../../utils/binder';
+import { binder } from '../../helpers/binder';
 
 // Services
 import { TokenService } from '../../services/TokenService';

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { TreatError } from './error';
-import { logger } from './logger';
+import { TreatError } from './TreatError';
+import { logger } from '../helpers/logger';
 
 export class Cookie {
   static generate = (

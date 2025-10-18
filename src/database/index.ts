@@ -1,6 +1,6 @@
 import { CREDENTIALS } from './credentials';
 import { ENV } from '../constants/enviroment';
-import { logger } from '../utils/logger';
+import { logger } from '../helpers//logger';
 import { injectable } from 'inversify';
 import { Sequelize } from 'sequelize';
 import { MODELS } from './models';

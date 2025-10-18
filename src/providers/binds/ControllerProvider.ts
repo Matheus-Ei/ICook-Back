@@ -1,4 +1,4 @@
-import { binder } from '../../utils/binder';
+import { binder } from '../../helpers/binder';
 
 // Controllers
 import { UserController } from '../../controllers/UserController';

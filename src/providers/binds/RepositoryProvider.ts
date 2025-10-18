@@ -1,4 +1,4 @@
-import { binder } from '../../utils/binder';
+import { binder } from '../../helpers/binder';
 
 // Repositories
 import { UserRepository } from '../../repositories/UserRepository';

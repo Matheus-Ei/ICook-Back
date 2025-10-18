@@ -1,7 +1,5 @@
-import { container } from '../providers/container';
 import { TYPES } from '../providers/types';
 import { Container } from 'inversify';
-import { logger } from './logger';
 
 // eslint-disable-next-line
 export type Constructor<T = any> = new (...args: any[]) => T;
@@ -58,16 +56,3 @@ export class Bind {
     return this.container.get<T>(key);
   };
 }
-
-export const binder = <T>(
-  ClassToBind: Constructor<T>,
-  key: keyof typeof TYPES,
-  scope: 'singleton' | 'transient' | 'request' = 'singleton'
-) => {
-  logger.debug(
-    `${ClassToBind.name} binded to the "${key}" key with ${scope} scope`
-  );
-  const bind = new Bind(container);
-
-  bind.register<T>(ClassToBind, key, scope);
-};

@@ -3,12 +3,12 @@ import { AsyncMaybe, Editable } from '../types';
 import { inject, injectable } from 'inversify';
 import { TokenService } from './TokenService';
 import { TYPES } from '../providers/types';
-import { Cookie } from '../utils/cookie';
+import { Cookie } from '../utils/Cookie';
 import { User } from '../entities/User';
-import { Hash } from '../utils/hash';
+import { Hash } from '../utils/Hash';
 import { Response } from 'express';
 import { Database } from '../database';
-import { TreatError } from '../utils/error';
+import { TreatError } from '../utils/TreatError';
 
 @injectable()
 export class UserService {

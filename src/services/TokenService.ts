@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import { Cookie } from '../utils/cookie';
+import { Cookie } from '../utils/Cookie';
 import { ENV } from '../constants/enviroment';
 import { injectable } from 'inversify';
 
