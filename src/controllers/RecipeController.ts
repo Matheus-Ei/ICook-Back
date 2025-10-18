@@ -42,6 +42,8 @@ export class RecipeController {
   create = async (req: Request, res: Response) => {
     try {
       req.body.ownerUserId = Number(this.tokenService.getUserId(req));
+      req.body.images = req.files;
+
       const data = await this.service.create(req.body);
 
       return Res.sendByType<EntityType>(res, 'created', undefined, data);

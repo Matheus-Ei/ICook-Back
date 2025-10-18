@@ -11,7 +11,7 @@ const Entity = UserSavedRecipe;
 const Model = UserSavedRecipesModel;
 
 @injectable()
-export class RecipeRepository {
+export class UserSavedRecipeRepository {
   private createObject = (data: ModelType | null): EntityType | null => {
     return data
       ? new Entity(

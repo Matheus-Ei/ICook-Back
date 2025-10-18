@@ -19,6 +19,11 @@ export const TYPES = {
   // Repositories
   UserRepository: Symbol.for('UserRepository'),
   RecipeRepository: Symbol.for('RecipeRepository'),
+  RecipeImageRepository: Symbol.for('RecipeImageRepository'),
+  RecipeRateRepository: Symbol.for('RecipeRateRepository'),
+  RecipeCommentRepository: Symbol.for('RecipeCommentRepository'),
+  UserSavedRecipeRepository: Symbol.for('UserSavedRecipeRepository'),
+  UserFollowRepository: Symbol.for('UserFollowRepository'),
 
   // Routes
   NotFoundRoute: Symbol.for('NotFoundRoute'),

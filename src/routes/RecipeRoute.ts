@@ -3,6 +3,7 @@ import { AbstractRoute } from './AbstractRoute';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../providers/types';
 import { RecipeSchema } from '../schemas/RecipeSchema';
+import { ImageUploadMiddleware } from '../middlewares/ImageUploadMiddleware';
 
 const Schema = RecipeSchema;
 
@@ -16,8 +17,11 @@ export class RecipeRoute extends AbstractRoute {
   }
 
   protected init = () => {
+    const imageUploadMiddleware = new ImageUploadMiddleware()
+
     this.router.post(
       '/',
+      imageUploadMiddleware.array('images'),
       this.validator.body(Schema.default()),
       this.controller.create
     );
