@@ -10,6 +10,7 @@ import { RecipeRoute } from '../routes/RecipeRoute';
 import { RecipeCommentRoute } from '../routes/RecipeCommentRoute';
 import { RecipeRateRoute } from '../routes/RecipeRateRoute';
 import { UserSavedRecipeRoute } from '../routes/UserSavedRecipeRoute';
+import { UserFollowRoute } from '../routes/UserFollowRoute';
 
 interface RouteType {
   endpoint: string;
@@ -21,6 +22,8 @@ const getRouter = <T extends AbstractRoute>(type: keyof typeof TYPES) => {
 };
 
 export const ROUTES: RouteType[] = [
+  { endpoint: '/users/follows', router: getRouter<UserFollowRoute>('UserFollowRoute') },
+
   { endpoint: '/users', router: getRouter<UserRoute>('UserRoute') },
 
   { endpoint: '/recipes/comments', router: getRouter<RecipeCommentRoute>('RecipeCommentRoute') },

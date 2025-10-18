@@ -26,6 +26,35 @@ export class UserFollowRepository {
     return this.createObject(await Model.findByPk(id));
   };
 
+  follow = async (
+    followedUserId: number,
+    followerUserId: number,
+    transaction?: Transaction
+  ): AsyncMaybe<EntityType> => {
+    return this.createObject(
+      await Model.create(
+        { followedUserId, followerUserId },
+        { transaction }
+      )
+    );
+  };
+
+  isFollowed = async (followedUserId: number, followerUserId: number): AsyncMaybe<EntityType> => {
+    return this.createObject(
+      await Model.findOne({
+        where: { followedUserId, followerUserId },
+      })
+    );
+  };
+
+  unfollow = async (followedUserId: number, followerUserId: number): Promise<boolean> => {
+    const deletedCount = await Model.destroy({
+      where: { followedUserId, followerUserId },
+    });
+    return deletedCount > 0;
+  };
+
+
   getAll = async (): AsyncMaybe<EntityType[]> => {
     return await Model.findAll();
   };

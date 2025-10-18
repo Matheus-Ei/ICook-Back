@@ -32,6 +32,8 @@ export class UserRoute extends AbstractRoute {
 
     this.router.delete('/', this.controller.delete);
 
-    this.router.get('/', this.controller.get);
+    this.router.get('/', this.controller.getCurrent);
+
+    this.router.get('/:userId', this.controller.get);
   };
 }

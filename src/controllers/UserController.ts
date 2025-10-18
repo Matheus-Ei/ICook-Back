@@ -6,6 +6,7 @@ import { User } from '../entities/User';
 import { Res } from '../utils/Res';
 import { omit } from '../helpers/omit';
 import { TokenService } from '../services/TokenService';
+import { CompleteUserType } from '../types/Users';
 
 type EntityType = User;
 
@@ -29,7 +30,7 @@ export class UserController {
     }
   };
 
-  get = async (req: Request, res: Response) => {
+  getCurrent = async (req: Request, res: Response) => {
     try {
       const cookieId = this.tokenService.getUserId(req);
 
@@ -39,11 +40,30 @@ export class UserController {
 
       if (!data) return Res.sendByType(res, 'notFound');
 
-      return Res.sendByType<Omit<EntityType, 'password'>>(
+      return Res.sendByType<CompleteUserType>(
         res,
         'found',
         undefined,
-        omit(data, 'password')
+        data
+      );
+    } catch (error) {
+      return Res.sendByType(res, 'internalError', error);
+    }
+  };
+
+  get = async (req: Request, res: Response) => {
+    try {
+      const id = Number(req.params.userId);
+      if (isNaN(id)) return Res.sendByType(res, 'badRequest');
+
+      const data = await this.service.get(id);
+      if (!data) return Res.sendByType(res, 'notFound');
+
+      return Res.sendByType<CompleteUserType>(
+        res,
+        'found',
+        undefined,
+        data
       );
     } catch (error) {
       return Res.sendByType(res, 'internalError', error);

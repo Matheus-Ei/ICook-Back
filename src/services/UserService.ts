@@ -9,6 +9,7 @@ import { Hash } from '../utils/Hash';
 import { Response } from 'express';
 import { Database } from '../database';
 import { TreatError } from '../utils/TreatError';
+import { CompleteUserType } from '../types/Users';
 
 type EntityType = User;
 
@@ -78,7 +79,7 @@ export class UserService {
     return this.repository.deleteById(id);
   };
 
-  get = async (id: number): AsyncMaybe<EntityType> => {
+  get = async (id: number): AsyncMaybe<CompleteUserType> => {
     return this.repository.findById(id);
   };
 
