@@ -9,6 +9,7 @@ import { NotFoundRoute } from '../routes/NotFoundRoute';
 import { RecipeRoute } from '../routes/RecipeRoute';
 import { RecipeCommentRoute } from '../routes/RecipeCommentRoute';
 import { RecipeRateRoute } from '../routes/RecipeRateRoute';
+import { UserSavedRecipeRoute } from '../routes/UserSavedRecipeRoute';
 
 interface RouteType {
   endpoint: string;
@@ -22,11 +23,13 @@ const getRouter = <T extends AbstractRoute>(type: keyof typeof TYPES) => {
 export const ROUTES: RouteType[] = [
   { endpoint: '/users', router: getRouter<UserRoute>('UserRoute') },
 
-  { endpoint: '/recipes', router: getRouter<RecipeRoute>('RecipeRoute') },
-
   { endpoint: '/recipes/comments', router: getRouter<RecipeCommentRoute>('RecipeCommentRoute') },
 
   { endpoint: '/recipes/rates', router: getRouter<RecipeRateRoute>('RecipeRateRoute') },
+
+  { endpoint: '/recipes/saved', router: getRouter<UserSavedRecipeRoute>('UserSavedRecipeRoute') },
+
+  { endpoint: '/recipes', router: getRouter<RecipeRoute>('RecipeRoute') },
 
   { endpoint: '/', router: getRouter<NotFoundRoute>('NotFoundRoute') },
 ];

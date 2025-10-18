@@ -26,6 +26,26 @@ export class UserSavedRecipeRepository {
     return this.createObject(await Model.findByPk(id));
   };
 
+  findByRecipeAndUser = async (recipeId: number, userId: number): AsyncMaybe<EntityType> => {
+    const record = await Model.findOne({ where: { recipeId, userId } });
+    return this.createObject(record);
+  };
+
+  getSavedByUser = async (userId: number): Promise<EntityType[]> => {
+    const records = await Model.findAll({ where: { userId } });
+    return records.map((record) => this.createObject(record)!) ;
+  };
+
+  unsave = async (recipeId: number, userId: number): Promise<boolean> => {
+    const deletedCount = await Model.destroy({ where: { recipeId, userId } });
+    return deletedCount > 0;
+  };
+
+  save = async (recipeId: number, userId: number): AsyncMaybe<EntityType> => {
+    const record = await Model.create({ recipeId, userId });
+    return this.createObject(record);
+  };
+
   getAll = async (): AsyncMaybe<EntityType[]> => {
     return await Model.findAll();
   };

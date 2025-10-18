@@ -7,6 +7,7 @@ import { TokenRoute } from '../../routes/TokenRoute';
 import { RecipeRoute } from '../../routes/RecipeRoute';
 import { RecipeCommentRoute } from '../../routes/RecipeCommentRoute';
 import { RecipeRateRoute } from '../../routes/RecipeRateRoute';
+import { UserSavedRecipeRoute } from '../../routes/UserSavedRecipeRoute';
 
 binder(NotFoundRoute, 'NotFoundRoute');
 binder(TokenRoute, 'TokenRoute');
@@ -14,3 +15,4 @@ binder(UserRoute, 'UserRoute');
 binder(RecipeRoute, 'RecipeRoute');
 binder(RecipeCommentRoute, 'RecipeCommentRoute');
 binder(RecipeRateRoute, 'RecipeRateRoute');
+binder(UserSavedRecipeRoute, 'UserSavedRecipeRoute');

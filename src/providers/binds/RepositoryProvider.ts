@@ -16,4 +16,3 @@ binder(RecipeRateRepository, 'RecipeRateRepository');
 binder(RecipeCommentRepository, 'RecipeCommentRepository');
 binder(UserSavedRecipeRepository, 'UserSavedRecipeRepository');
 binder(UserFollowRepository, 'UserFollowRepository');
-
