@@ -27,6 +27,18 @@ export class RecipeController {
     }
   };
 
+  getAll = async (_: Request, res: Response) => {
+    try {
+      const data = await this.service.getAll();
+
+      if (!data) return Res.sendByType(res, 'notFound');
+
+      return Res.sendByType<EntityType[]>(res, 'found', undefined, data);
+    } catch (error) {
+      return Res.sendByType(res, 'internalError', error);
+    }
+  };
+
   create = async (req: Request, res: Response) => {
     try {
       req.body.ownerUserId = Number(this.tokenService.getUserId(req));

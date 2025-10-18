@@ -19,6 +19,10 @@ export class RecipeService {
     return this.repository.findById(id);
   };
 
+  getAll = async (): AsyncMaybe<EntityType[]> => {
+    return this.repository.getAll();
+  };
+
   create = async (data: Omit<EntityType, 'id'>): Promise<EntityType> => {
     const transaction = await this.database.connection.transaction();
 

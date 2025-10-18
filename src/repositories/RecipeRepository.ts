@@ -29,6 +29,10 @@ export class RecipeRepository {
     return this.createObject(await Model.findByPk(id));
   };
 
+  getAll = async (): AsyncMaybe<EntityType[]> => {
+    return await Model.findAll();
+  };
+
   create = async (
     data: Omit<EntityType, 'id'>,
     transaction?: Transaction
