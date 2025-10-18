@@ -7,12 +7,9 @@ import { Database } from '../database';
 import { TreatError } from '../utils/TreatError';
 import { RecipeImageRepository } from '../repositories/RecipeImageRepository';
 import { Base64Converter } from '../utils/Base64Converter';
+import { CompleteRecipeType, CreateRecipeType } from '../types/Recipes';
 
 type EntityType = Recipe;
-
-export interface CreateRecipeType extends Omit<Recipe, 'id'> {
-  images: Buffer[];
-}
 
 @injectable()
 export class RecipeService {
@@ -22,8 +19,8 @@ export class RecipeService {
     @inject(TYPES.Database) private database: Database
   ) {}
 
-  get = async (id: number): AsyncMaybe<EntityType> => {
-    return this.repository.findById(id);
+  get = async (id: number, currentUserId: number): AsyncMaybe<CompleteRecipeType> => {
+    return this.repository.findById(id, currentUserId);
   };
 
   getAll = async (): AsyncMaybe<EntityType[]> => {

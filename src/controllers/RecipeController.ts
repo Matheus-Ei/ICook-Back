@@ -17,7 +17,8 @@ export class RecipeController {
 
   get = async (req: Request, res: Response) => {
     try {
-      const data = await this.service.get(Number(req.params.id));
+      const currentUserId = Number(this.tokenService.getUserId(req));
+      const data = await this.service.get(Number(req.params.id), currentUserId);
 
       if (!data) return Res.sendByType(res, 'notFound');
 
@@ -60,7 +61,8 @@ export class RecipeController {
         req.body
       );
 
-      const data = await this.service.get(Number(req.params.id));
+      const currentUserId = Number(this.tokenService.getUserId(req));
+      const data = await this.service.get(Number(req.params.id), currentUserId);
 
       if (!updated || !data) return Res.sendByType(res, 'notFound');
 
