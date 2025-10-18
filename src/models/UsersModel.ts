@@ -39,7 +39,9 @@ export class UsersModel extends AbstractModel<UsersModel> {
           type: DataTypes.DATE,
           field: 'updated_at',
           allowNull: false,
-          defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+          defaultValue: Sequelize.literal(
+            'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'
+          ),
         },
       },
 

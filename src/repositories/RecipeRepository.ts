@@ -1,29 +1,32 @@
-import { User } from '../entities/User';
-import { UsersModel } from '../models/UsersModel';
+import { Recipe } from '../entities/Recipe';
+import { RecipesModel } from '../models/RecipesModel';
 import { AsyncMaybe, Editable } from '../types';
 import { injectable } from 'inversify';
 import { Transaction } from 'sequelize';
 
-type EntityType = User;
-type ModelType = UsersModel;
+type EntityType = Recipe;
+type ModelType = RecipesModel;
 
-const Entity = User;
-const Model = UsersModel;
+const Entity = Recipe;
+const Model = RecipesModel;
 
 @injectable()
-export class UserRepository {
+export class RecipeRepository {
   private createObject = (data: ModelType | null): EntityType | null => {
     return data
-      ? new Entity(data.id, data.name, data.email, data.password)
+      ? new Entity(
+          data.id,
+          data.title,
+          data.ingredients,
+          data.instructions,
+          data.ownerUserId,
+          data.description
+        )
       : null;
   };
 
   findById = async (id: number): AsyncMaybe<EntityType> => {
     return this.createObject(await Model.findByPk(id));
-  };
-
-  findByEmail = async (email: string): AsyncMaybe<EntityType> => {
-    return this.createObject(await Model.findOne({ where: { email } }));
   };
 
   create = async (

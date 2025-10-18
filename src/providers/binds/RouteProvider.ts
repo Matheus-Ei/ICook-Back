@@ -4,7 +4,9 @@ import { binder } from '../../helpers/binder';
 import { UserRoute } from '../../routes/UserRoute';
 import { NotFoundRoute } from '../../routes/NotFoundRoute';
 import { TokenRoute } from '../../routes/TokenRoute';
+import { RecipeRoute } from '../../routes/RecipeRoute';
 
 binder(NotFoundRoute, 'NotFoundRoute');
 binder(TokenRoute, 'TokenRoute');
 binder(UserRoute, 'UserRoute');
+binder(RecipeRoute, 'RecipeRoute');

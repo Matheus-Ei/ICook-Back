@@ -6,11 +6,11 @@ import { Res } from '../utils/Res';
 
 @injectable()
 export class TokenController {
-  constructor(@inject(TYPES.TokenService) private tokenService: TokenService) {}
+  constructor(@inject(TYPES.TokenService) private service: TokenService) {}
 
   verify = async (req: Request, res: Response): Promise<void> => {
     try {
-      const decoded = this.tokenService.verifyAccessToken(req);
+      const decoded = this.service.verifyAccessToken(req);
 
       if (!decoded) return Res.send(res, 'The access token is not valid', 401);
 

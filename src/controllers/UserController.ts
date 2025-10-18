@@ -7,10 +7,12 @@ import { Res } from '../utils/Res';
 import { omit } from '../helpers/omit';
 import { TokenService } from '../services/TokenService';
 
+type EntityType = User;
+
 @injectable()
 export class UserController {
   constructor(
-    @inject(TYPES.UserService) private userService: UserService,
+    @inject(TYPES.UserService) private service: UserService,
     @inject(TYPES.TokenService) private tokenService: TokenService
   ) {}
 
@@ -18,7 +20,7 @@ export class UserController {
     const { email, password } = req.body;
 
     try {
-      const isValid = await this.userService.login(email, password, res);
+      const isValid = await this.service.login(email, password, res);
       if (!isValid) return Res.send(res, 'Email or password incorrect', 401);
 
       return Res.sendByType(res, 'success');
@@ -33,15 +35,15 @@ export class UserController {
 
       if (cookieId === null) return Res.sendByType(res, 'badRequest');
 
-      const user = await this.userService.get(Number(cookieId));
+      const data = await this.service.get(Number(cookieId));
 
-      if (!user) return Res.sendByType(res, 'notFound');
+      if (!data) return Res.sendByType(res, 'notFound');
 
-      return Res.sendByType<Omit<User, 'password'>>(
+      return Res.sendByType<Omit<EntityType, 'password'>>(
         res,
         'found',
         undefined,
-        omit(user, 'password')
+        omit(data, 'password')
       );
     } catch (error) {
       return Res.sendByType(res, 'internalError', error);
@@ -49,16 +51,14 @@ export class UserController {
   };
 
   signup = async (req: Request, res: Response) => {
-    const data = req.body;
-
     try {
-      const user = await this.userService.signup(data, res);
+      const data = await this.service.signup(req.body, res);
 
-      return Res.sendByType<Omit<User, 'password'>>(
+      return Res.sendByType<Omit<EntityType, 'password'>>(
         res,
         'created',
         undefined,
-        omit(user, 'password')
+        omit(data, 'password')
       );
     } catch (error) {
       return Res.sendByType(res, 'internalError', error);
@@ -66,20 +66,18 @@ export class UserController {
   };
 
   update = async (req: Request, res: Response) => {
-    const data = req.body;
-
     try {
       const id = this.tokenService.getUserId(req);
 
       if (id === null) return Res.sendByType(res, 'badRequest');
 
-      const wasUpdated = await this.userService.update(Number(id), data);
+      const wasUpdated = await this.service.update(Number(id), req.body);
 
-      const user = await this.userService.get(Number(id));
+      const data = await this.service.get(Number(id));
 
-      if (!wasUpdated || !user) return Res.sendByType(res, 'notFound');
+      if (!wasUpdated || !data) return Res.sendByType(res, 'notFound');
 
-      return Res.sendByType<User>(res, 'updated', undefined, user);
+      return Res.sendByType<EntityType>(res, 'updated', undefined, data);
     } catch (error) {
       return Res.sendByType(res, 'internalError', error);
     }
@@ -91,7 +89,7 @@ export class UserController {
 
       if (id === null) return Res.sendByType(res, 'badRequest');
 
-      const isDeleted = await this.userService.delete(Number(id));
+      const isDeleted = await this.service.delete(Number(id));
       if (!isDeleted) return Res.sendByType(res, 'notFound');
 
       return Res.sendByType(res, 'deleted');
@@ -102,7 +100,7 @@ export class UserController {
 
   logout = async (_: Request, res: Response) => {
     try {
-      this.userService.logout(res);
+      this.service.logout(res);
 
       return Res.sendByType(res, 'success');
     } catch (error) {

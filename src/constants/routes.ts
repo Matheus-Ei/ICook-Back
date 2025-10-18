@@ -6,6 +6,7 @@ import { Router } from 'express';
 import { UserRoute } from '../routes/UserRoute';
 import { AbstractRoute } from '../routes/AbstractRoute';
 import { NotFoundRoute } from '../routes/NotFoundRoute';
+import { RecipeRoute } from '../routes/RecipeRoute';
 
 interface RouteType {
   endpoint: string;
@@ -18,6 +19,8 @@ const getRouter = <T extends AbstractRoute>(type: keyof typeof TYPES) => {
 
 export const ROUTES: RouteType[] = [
   { endpoint: '/users', router: getRouter<UserRoute>('UserRoute') },
+
+  { endpoint: '/recipes', router: getRouter<RecipeRoute>('RecipeRoute') },
 
   { endpoint: '/', router: getRouter<NotFoundRoute>('NotFoundRoute') },
 ];

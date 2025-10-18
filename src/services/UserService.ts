@@ -10,12 +10,14 @@ import { Response } from 'express';
 import { Database } from '../database';
 import { TreatError } from '../utils/TreatError';
 
+type EntityType = User;
+
 @injectable()
 export class UserService {
   constructor(
-    @inject(TYPES.UserRepository) private userRepository: UserRepository,
+    @inject(TYPES.UserRepository) private repository: UserRepository,
     @inject(TYPES.TokenService) private tokenService: TokenService,
-    @inject(TYPES.Database) private database: Database,
+    @inject(TYPES.Database) private database: Database
   ) {}
 
   login = async (
@@ -23,40 +25,37 @@ export class UserService {
     password: string,
     res?: Response
   ): Promise<boolean> => {
-    const user = await this.userRepository.findByEmail(email);
+    const data = await this.repository.findByEmail(email);
 
-    if (!user) return false;
+    if (!data) return false;
 
-    const isMatch = await Hash.compare(password, user.password);
+    const isMatch = await Hash.compare(password, data.password);
 
     if (isMatch && res) {
-      this.tokenService.generateAccessToken(String(user.id), res);
-      this.tokenService.generateRefreshToken(String(user.id), res);
+      this.tokenService.generateAccessToken(String(data.id), res);
+      this.tokenService.generateRefreshToken(String(data.id), res);
     }
 
     return isMatch ? true : false;
   };
 
   signup = async (
-    userData: Omit<User, 'id'>,
+    data: Omit<EntityType, 'id'>,
     res?: Response
-  ): Promise<User> => {
+  ): Promise<EntityType> => {
     const transaction = await this.database.connection.transaction();
 
     try {
-      const hashedPassword = await Hash.make(userData.password);
+      const hashedPassword = await Hash.make(data.password);
       if (!hashedPassword)
         throw new Error('The password does not hashed successfuly');
 
-      const user = await this.userRepository.create(
-        {
-          ...userData,
-          password: hashedPassword,
-        },
+      const created = await this.repository.create(
+        { ...data, password: hashedPassword },
         transaction
       );
 
-      if (!user) {
+      if (!created) {
         await transaction.rollback();
         throw new Error('The user was not created');
       }
@@ -64,11 +63,11 @@ export class UserService {
       await transaction.commit();
 
       if (res) {
-        this.tokenService.generateAccessToken(String(user.id), res);
-        this.tokenService.generateRefreshToken(String(user.id), res);
+        this.tokenService.generateAccessToken(String(created.id), res);
+        this.tokenService.generateRefreshToken(String(created.id), res);
       }
 
-      return user;
+      return created;
     } catch (error) {
       transaction.rollback();
       throw new Error(TreatError.stringify(error));
@@ -76,17 +75,17 @@ export class UserService {
   };
 
   delete = async (id: number): Promise<boolean> => {
-    return this.userRepository.deleteById(id);
+    return this.repository.deleteById(id);
   };
 
-  get = async (id: number): AsyncMaybe<User> => {
-    return this.userRepository.findById(id);
+  get = async (id: number): AsyncMaybe<EntityType> => {
+    return this.repository.findById(id);
   };
 
-  update = async (id: number, user: Editable<User>): Promise<boolean> => {
-    if (user?.password) user.password = await Hash.make(user.password);
+  update = async (id: number, data: Editable<EntityType>): Promise<boolean> => {
+    if (data?.password) data.password = await Hash.make(data.password);
 
-    return this.userRepository.updateById(id, user);
+    return this.repository.updateById(id, data);
   };
 
   logout = (res: Response): void => {

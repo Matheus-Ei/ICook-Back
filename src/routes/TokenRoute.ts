@@ -6,13 +6,13 @@ import { TYPES } from '../providers/types';
 @injectable()
 export class TokenRoute extends AbstractRoute {
   constructor(
-    @inject(TYPES.TokenController) private tokenController: TokenController
+    @inject(TYPES.TokenController) private controller: TokenController
   ) {
     super();
     this.init();
   }
 
   protected init = () => {
-    this.router.get('/validity', this.tokenController.verify);
+    this.router.get('/validity', this.controller.verify);
   };
 }

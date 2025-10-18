@@ -4,10 +4,12 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '../providers/types';
 import { UserSchema } from '../schemas/UserSchema';
 
+const Schema = UserSchema;
+
 @injectable()
 export class UserRoute extends AbstractRoute {
   constructor(
-    @inject(TYPES.UserController) private userController: UserController
+    @inject(TYPES.UserController) private controller: UserController
   ) {
     super();
     this.init();
@@ -16,26 +18,26 @@ export class UserRoute extends AbstractRoute {
   protected init = () => {
     this.router.post(
       '/auth',
-      this.validator.body(UserSchema.login()),
-      this.userController.login
+      this.validator.body(Schema.login()),
+      this.controller.login
     );
 
-    this.router.delete('/auth', this.userController.logout);
+    this.router.delete('/auth', this.controller.logout);
 
     this.router.post(
       '/',
-      this.validator.body(UserSchema.create()),
-      this.userController.signup
+      this.validator.body(Schema.create()),
+      this.controller.signup
     );
 
     this.router.patch(
       '/',
-      this.validator.body(UserSchema.update()),
-      this.userController.update
+      this.validator.body(Schema.update()),
+      this.controller.update
     );
 
-    this.router.delete('/', this.userController.delete);
+    this.router.delete('/', this.controller.delete);
 
-    this.router.get('/', this.userController.get);
+    this.router.get('/', this.controller.get);
   };
 }

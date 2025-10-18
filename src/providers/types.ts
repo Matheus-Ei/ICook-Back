@@ -2,10 +2,12 @@ export const TYPES = {
   // Controllers
   TokenController: Symbol.for('TokenController'),
   UserController: Symbol.for('UserController'),
+  RecipeController: Symbol.for('RecipeController'),
 
   // Services
   TokenService: Symbol.for('TokenService'),
   UserService: Symbol.for('UserService'),
+  RecipeService: Symbol.for('RecipeService'),
 
   // Middlewares
   AuthMiddleware: Symbol.for('AuthMiddleware'),
@@ -16,11 +18,13 @@ export const TYPES = {
 
   // Repositories
   UserRepository: Symbol.for('UserRepository'),
+  RecipeRepository: Symbol.for('RecipeRepository'),
 
   // Routes
   NotFoundRoute: Symbol.for('NotFoundRoute'),
   TokenRoute: Symbol.for('TokenRoute'),
   UserRoute: Symbol.for('UserRoute'),
+  RecipeRoute: Symbol.for('RecipeRoute'),
 
   // Database
   Database: Symbol.for('Database'),
