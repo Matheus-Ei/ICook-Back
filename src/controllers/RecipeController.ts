@@ -5,6 +5,7 @@ import { TYPES } from '../providers/types';
 import { Recipe } from '../entities/Recipe';
 import { Res } from '../utils/Res';
 import { TokenService } from '../services/TokenService';
+import { RecipeFeedItem } from '../types/Recipes';
 
 type EntityType = Recipe;
 
@@ -23,6 +24,17 @@ export class RecipeController {
       if (!data) return Res.sendByType(res, 'notFound');
 
       return Res.sendByType<EntityType>(res, 'found', undefined, data);
+    } catch (error) {
+      return Res.sendByType(res, 'internalError', error);
+    }
+  };
+
+  getFeed = async (_: Request, res: Response) => {
+    try {
+      const data = await this.service.getFeed();
+      if (!data) return Res.sendByType(res, 'notFound');
+
+      return Res.sendByType<RecipeFeedItem[]>(res, 'found', undefined, data);
     } catch (error) {
       return Res.sendByType(res, 'internalError', error);
     }
