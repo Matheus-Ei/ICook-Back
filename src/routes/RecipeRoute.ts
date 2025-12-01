@@ -26,10 +26,12 @@ export class RecipeRoute extends AbstractRoute {
       this.controller.create
     );
 
-    this.router.delete('/:id', this.controller.delete);
+    this.router.get('/feed', this.controller.getFeed);
+
+    this.router.get('/', this.controller.getAll);
 
     this.router.get('/:id', this.controller.get);
 
-    this.router.get('/', this.controller.getAll);
+    this.router.delete('/:id', this.controller.delete);
   };
 }
