@@ -20,8 +20,7 @@ export class RecipeRateService {
     });
 
     if (alreadyRated) {
-      await this.repository.updateById(alreadyRated.id, { rate: data.rate });
-      return { ...alreadyRated, rate: data.rate };
+      throw new Error('The user has already rated this recipe');
     }
 
     const created = await this.repository.create(data);

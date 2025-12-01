@@ -18,19 +18,3 @@ export interface CompleteRecipeType extends Recipe {
   is_saved_by_user: boolean;
   user_rate: number | null;
 }
-
-export interface RecipeFeedItem {
-  id: number;
-  title: string;
-  description: string;
-  ingredients: string;
-  instructions: string;
-  owner: {
-    id: number;
-    name: string;
-  };
-  images: {
-    id: number;
-    url: string;
-  }[];
-}
