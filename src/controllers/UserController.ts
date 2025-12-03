@@ -88,16 +88,18 @@ export class UserController {
   update = async (req: Request, res: Response) => {
     try {
       const id = this.tokenService.getUserId(req);
-
       if (id === null) return Res.sendByType(res, 'badRequest');
 
-      const wasUpdated = await this.service.update(Number(id), req.body);
+      const updatedUser = await this.service.update(Number(id), req.body);
 
-      const data = await this.service.get(Number(id));
+      if (!updatedUser) return Res.sendByType(res, 'notFound');
 
-      if (!wasUpdated || !data) return Res.sendByType(res, 'notFound');
-
-      return Res.sendByType<EntityType>(res, 'updated', undefined, data);
+      return Res.sendByType<CompleteUserType>(
+        res,
+        'updated',
+        undefined,
+        updatedUser
+      );
     } catch (error) {
       return Res.sendByType(res, 'internalError', error);
     }
