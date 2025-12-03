@@ -6,7 +6,7 @@ import { injectable } from 'inversify';
 import { QueryTypes, Sequelize, Transaction } from 'sequelize';
 import { Database } from '../database';
 import { TYPES } from '../providers/types';
-import { CompleteRecipeType } from '../types/Recipes';
+import { CompleteRecipeType, RecipeFeedItem } from '../types/Recipes';
 
 type EntityType = Recipe;
 type ModelType = RecipesModel;
@@ -35,6 +35,34 @@ export class RecipeRepository {
           data.description
         )
       : null;
+  };
+
+  getFeed = async (): AsyncMaybe<RecipeFeedItem[]> => {
+    const response = await this.database.query<RecipeFeedItem>(
+      `
+      SELECT
+        r.id,
+        r.title,
+        r.description,
+        r.ingredients,
+        r.instructions,
+        JSON_BUILD_OBJECT('id', u.id, 'name', u.name) AS owner,
+        (
+          SELECT JSON_AGG(JSON_BUILD_OBJECT('id', ri.id, 'url', ri.image_base64))
+          FROM recipe_images ri
+          WHERE ri.recipe_id = r.id
+        ) AS images
+      FROM recipes r
+      JOIN users u ON r.owner_user_id = u.id
+      GROUP BY r.id, u.id
+      ORDER BY r.created_at DESC;
+      `,
+      {
+        type: QueryTypes.SELECT,
+      }
+    );
+
+    return response || null;
   };
 
   findById = async (id: number, currentUserId: number): AsyncMaybe<CompleteRecipeType> => {
