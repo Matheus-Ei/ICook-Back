@@ -25,15 +25,10 @@ export class UserRoute extends AbstractRoute {
     this.router.delete('/auth', this.controller.logout);
 
     this.router.post(
-   '/',
-    this.validator.body(Schema.create()),
-    this.controller.signup
-  );
-
-    this.router.put('/',
-    this.validator.body(Schema.update()),
-    this.controller.update
-  );
+      '/',
+      this.validator.body(Schema.create()),
+      this.controller.signup
+    );
 
     this.router.delete('/', this.controller.delete);
 
