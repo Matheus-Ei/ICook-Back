@@ -21,13 +21,8 @@ export class UserService {
     @inject(TYPES.Database) private database: Database
   ) {}
 
-  login = async (
-    email: string,
-    password: string,
-    res?: Response
-  ): Promise<boolean> => {
+  login = async (email: string, password: string, res?: Response): Promise<boolean> => {
     const data = await this.repository.findByEmail(email);
-
     if (!data) return false;
 
     const isMatch = await Hash.compare(password, data.password);
@@ -37,20 +32,14 @@ export class UserService {
       this.tokenService.generateRefreshToken(String(data.id), res);
     }
 
-    return isMatch ? true : false;
+    return isMatch;
   };
 
-  signup = async (
-    data: Omit<EntityType, 'id'>,
-    res?: Response
-  ): Promise<EntityType> => {
+  signup = async (data: Omit<EntityType, 'id'>, res?: Response): Promise<EntityType> => {
     const transaction = await this.database.connection.transaction();
 
     try {
       const hashedPassword = await Hash.make(data.password);
-      if (!hashedPassword)
-        throw new Error('The password does not hashed successfuly');
-
       const created = await this.repository.create(
         { ...data, password: hashedPassword },
         transaction
@@ -83,10 +72,15 @@ export class UserService {
     return this.repository.findById(id);
   };
 
-  update = async (id: number, data: Editable<EntityType>): Promise<boolean> => {
-    if (data?.password) data.password = await Hash.make(data.password);
+  update = async (id: number, data: Editable<EntityType>): Promise<CompleteUserType | null> => {
+    if (data?.password) {
+      data.password = await Hash.make(data.password);
+    }
 
-    return this.repository.updateById(id, data);
+    const wasUpdated = await this.repository.updateById(id, data);
+    if (!wasUpdated) return null;
+
+    return await this.repository.findById(id);
   };
 
   logout = (res: Response): void => {

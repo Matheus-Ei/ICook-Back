@@ -7,7 +7,7 @@ import { Database } from '../database';
 import { TreatError } from '../utils/TreatError';
 import { RecipeImageRepository } from '../repositories/RecipeImageRepository';
 import { Base64Converter } from '../utils/Base64Converter';
-import { CompleteRecipeType, CreateRecipeType, RecipeFeedItem } from '../types/Recipes';
+import { CompleteRecipeType, CreateRecipeType } from '../types/Recipes';
 
 type EntityType = Recipe;
 
@@ -21,10 +21,6 @@ export class RecipeService {
 
   get = async (id: number, currentUserId: number): AsyncMaybe<CompleteRecipeType> => {
     return this.repository.findById(id, currentUserId);
-  };
-
-  getFeed = async (): AsyncMaybe<RecipeFeedItem[]> => {
-    return this.repository.getFeed();
   };
 
   getAll = async (): AsyncMaybe<EntityType[]> => {
